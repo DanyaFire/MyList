@@ -11,69 +11,40 @@ b) номер человека c которого начинался счет, �
 using namespace std;
 
 int main() {
-    cout<<"aboba";
-     int N = 10;
-    printf(" aboba\n");
+    FILE* m = fopen("inp.txt","r");
+    FILE* e = fopen("out.txt","w");
+    int N, M, L;
     Slist<int> A;
+    fscanf(m, "%d %d %d", &N, &M, &L);
+    if(N < 1) {
+        cout<<"Количество N человек < 1";
+        return 0;
+    }
+    // Создание односвязного списка
     for (int i = 1; i <= N; i++) {
         A.Add(i);
     }
+    int i = 41;
+    cout<<A[i]->x<<endl;
     A.Show();
-    Slist<int>::iterator i = A.begin();
-    A.remlolove(i);
-    A.Show();
-    i = A.begin();
-    A.Show();
-    i++;
-    A.remlolove(i);
-    A.Show();
-    // FILE* m = fopen("inp.txt","r");
-    // FILE* e = fopen("out.txt","w");
-    // Slist<int> A;
-    // int N, M, L;
-    // fscanf(m, "%d %d %d", &N, &M, &L);
-    // // Создание односвязного списка
-    // for (int i = 1; i <= N; i++) {
-    //     A.Add(i);
-    //     if (A[0] == NULL) {
-    //         cout<<"Please, enter N > 0";
-    //         return -1;
-    //     }
-    // }
-    // A.Show();
-    // for(Slist<int>::iterator i = A.begin(); i != A.end(); i++) {
-    //     while(*i != M) i++;
-    //     A.remlolove(i);
-    // }
-    //int last = 0;
-    // for (int i = 1; i <= N; i++) {
-    //     for (int j = 1; j < M; j++) {
-    //         current = A[j-1]->next;
-    //         last = current->x;
-    //         cout<<last;
-    //         break;
-    //     }
-    //     Node<int>* temp = current->next;
-    //     current->next = temp->next;
-    //     last = temp->x;
-    //     free(temp);
-    // }
-
-    // printf("a) %d ", last);
-    
-    // Находим начало
-    // int begin = L - last + 1;
-    // if (begin <= 0) {
-    //     begin = begin + N;
-    // }
-    // printf("b) %d", begin);
-
-    // // Освобождение памяти
-    // Node* temp = head;
-    // while (temp != NULL) {
-    //     Node* nextNode = temp->next;
-    //     free(temp);
-    //     temp = nextNode;
-    // }
+    Node<int>* last = A[1];
+    cout<<" "<<last->x;
+    // Цикл по обходу списка
+    for (int i = 1; i <= N; i++) {
+        // Цикл для перехода на M-й элемент вперед
+        for (int j = 1; j < M; j++) {
+            last = last->next;
+        }
+        // Обновление указателей для удаления текущего элемента
+        Node<int>* temp = last->next;
+        last->next = temp->next;
+        // Вывод удаленного элемента
+        printf("%d ", temp->x);
+        // Освобождение памяти, если это необходимо
+        // free(temp);
+        // Обновление значения last
+        last = last->next;
+    }
+    printf("a) %d ", last->x);
     return 0;
 }
