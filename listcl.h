@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cmath>
 #include <chrono>
-#include <forward_list>
+#include <list>
 
 using namespace std;
 
@@ -16,22 +16,23 @@ struct Node {
 template<typename T>
 class Slist {
 private:
-  Node<T> *Head, *Tail;
+  Node<T> *Head;
   friend class iterator;
 public:
   Slist();
   Slist(const Slist& s);
   bool is_empty();
-  void Add(T x);
+  void Add(const T& x);
   void remove_head();
-  void remove_tail();
-  void remove(T x);
-  Node<T>* find_x(T x);
-  Node<T>* operator[](const T i);
-  Slist<T>& operator=(const Slist& g);
+  void remove(const T& x);
+  void remove(const Node<T>* bye);
+  //Node<T>* find_x(const T& x);
   void Show();
   int quantity();
   ~Slist();
+  Node<T>* operator[] (const int i);
+  Slist<T>& operator=(const Slist& g);
+  // void remove_tail();
   class iterator {
   private:
     friend class Slist<T>;
