@@ -60,7 +60,6 @@ int findStartingPerson(int N, int M, int L) {
     }
     // Находим оставшегося человека
     int remainingPerson = people.front();
-    cout<<N<<" "<<M<<" "<<L<<" "<<remainingPerson<<endl;
     // Теперь находим, с какого человека начинался счет
     int startingPerson = (L - M + remainingPerson - 1 + N) % N + 1;
     return startingPerson;
@@ -68,20 +67,31 @@ int findStartingPerson(int N, int M, int L) {
     
 
 int main() {
-    FILE* m = fopen("inp.txt","r");
-    FILE* e = fopen("out.txt","w");
+    /*
+    FILE* m;
+    try {
+        if((m = fopen("inp.txt","r")) == nullptr) throw Exception{"inp.txt"};
+    } catch (const Exception& ex) {
+        cout<<"Не существует такого файла, как "<<ex.getMessage()<<endl;
+        return -1;
+    }
     int B, N, M, L;
     double c;
     Slist<int> A;
     Node<int>* temp;
-    cout<<"С какого по счёту человека начнём считать? ";
-    cin>>B;
-    fscanf(m, "%d %d %d", &N, &M, &L);
-    auto start = high_resolution_clock::now();
+    try {
+        if(fscanf(m, "%d %d %d", &N, &M, &L) != 3) throw Exception{"inp.txt"};
+    } catch (const Exception& ex) {
+        cout<<"Некорректные данные в файле "<<ex.getMessage()<<endl;
+        return -1;
+    }
     if(N < 1) {
         cout<<"Количество N человек < 1";
         return 0;
     }
+    cout<<"С какого по счёту человека начнём считать? ";
+    cin>>B;
+    auto start = high_resolution_clock::now();
     // Создание односвязного списка
     for (int i = 1; i <= N; i++) {
         A.Add(i);
@@ -123,5 +133,13 @@ int main() {
     duration = duration_cast<nanoseconds>(end - start);
     c = duration.count();
     cout<<"Время выполнения: "<<c<<" наносекунд"<<endl; 
-    return 0;
+    */
+    //Тест оператора копирования 
+    Helped G;
+    Slist<Helped> lst; 
+    for (int i = 0; i < 10; ++i) { 
+        cout<<"aboba"; 
+        lst.Add(G);
+    }
+    return 0; 
 }

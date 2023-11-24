@@ -9,6 +9,9 @@ template<typename T>
 Node<T>::Node(T value) : x(value), next(nullptr) {};
 
 template<typename T>
+Node<T>::Node(T* value) : x(value), next(nullptr) {};
+
+template<typename T>
 bool Node<T>::comparison(const Node<T>& p1, const Node<T>& p2) {
   return (p1.x == p2.x) && (p1.next == p2.next);
 }
@@ -39,8 +42,27 @@ Slist<T>::~Slist() {
 }
 
 template<typename T>
-bool Slist<T>::is_empty() {
+bool Slist<T>::is_empty() const {
   return (Head == NULL);
+}
+
+template <class T>
+bool Slist<T>::operator==(const Slist<T>& obj) {
+  if (quantity() != obj.quantity()) return false;
+  if (Head->x != obj.Head->x) return false;
+  Node<T>* t1 = Head->next;
+  Node<T>* t2 = obj.Head->next;
+  while (t1 != Head) {
+    if (t1->x != t2->x) return false;
+    t1 = t1->next;
+    t2 = t2->next;
+  }
+  return true;
+}
+
+template <class T>
+bool Slist<T>::operator!=(const Slist<T>& obj) {
+  return !(*this == obj);
 }
 
 template<class T> void Slist<T>::Add(const T& x) {
@@ -61,10 +83,28 @@ template<class T> void Slist<T>::Add(const T& x) {
   }
 }
 
+template<class T> void Slist<T>::Add(const T* x) {
+  Node<T>* temp = new Node<T>(*x);
+  if (is_empty()) {
+    temp->next = temp;
+    Head = temp;
+  } else if(Head->next == nullptr) {
+    Head->next = temp;
+    temp->next = Head;
+  } else {
+    Node<T>* last = Head->next;
+    while (last->next != Head) {
+      last = last->next;
+    }
+    last->next = temp;
+    temp->next = Head;
+  }
+}
+
 template<typename T>
 void Slist<T>::Show() {
-  Node<T>* current = Head->next;
   cout<<Head->x;
+  Node<T>* current = Head->next;
   while (current != Head) {
     cout<<" -> "<<current->x;
     current = current->next;
@@ -91,7 +131,7 @@ template<typename T> void Slist<T>::remove(const T& x) {
   } else {
     Node<T>* slow = Head;
     Node<T>* fast = Head->next;
-    while((fast != NULL) && (fast->x != x)) {
+    while((fast != Head) && (fast->x != x)) {
       fast = fast->next;
       slow = slow->next;
     }
@@ -103,19 +143,6 @@ template<typename T> void Slist<T>::remove(const T& x) {
     delete fast;
   }
 }
-// template<typename T>
-// void Slist<T>::remove_tail() {
-//   if(is_empty()) return;
-//   if(Head == Tail) {
-//     remove_head();
-//     return;
-//   }
-//   Node<T>* tmp = Head;
-//   while(tmp->next != Tail) tmp = tmp->next;
-//   tmp->next = Head;
-//   delete Tail;
-//   Tail = tmp;
-// }
 
 template<typename T> void Slist<T>::remove(const Node<T>* bye) {
   if(is_empty()) return;
@@ -131,17 +158,12 @@ template<typename T> void Slist<T>::remove(const Node<T>* bye) {
 
 template <typename T>
 void Slist<T>::remlolove(iterator& pos) {
-  // if(pos == end()) {
-  //   remove_tail();
-  // } else 
   if(pos == begin()) {
     remove_head();
   } else {
     iterator temp = begin();
     while(temp.cur->next != pos.cur) temp.cur = temp.cur->next;
     temp.cur->next = pos.cur->next;
-    // while(temp.cur->next != pos.cur) temp++;
-    // temp.cur->next = pos.cur->next;
     delete pos.cur;
   }
 }
@@ -170,6 +192,17 @@ Node<T>* Slist<T>::operator[] (const int i) {
   return p;
 }
 
+template <typename T>
+void Slist<T>::clear() {
+  Node<T> *current = Head;
+  while (current != NULL) {
+    Node<T> *next = current->next;
+    delete current;
+    current = next;
+  }
+  Head = NULL;
+}
+
 template<typename T>
 Slist<T>& Slist<T>::operator=(const Slist& g) {
   if (this != &g) {
@@ -186,7 +219,7 @@ Slist<T>& Slist<T>::operator=(const Slist& g) {
 }
 
 template<typename T>
-int Slist<T>::quantity() {
+int Slist<T>::quantity() const {
   if(is_empty()) return 0;
   Node<T>* tmp = Head;
   int size = 1;
@@ -210,6 +243,23 @@ typename Slist<T>::iterator Slist<T>::end() const {
   return iterator(last);
 }
 
+std::ostream & operator<<( std::ostream &O, Helped &L) {
+  if (L.lst.golova() != nullptr) {
+    Node<int>* tmp = L.lst.golova();
+    O << '<';
+    while (tmp->next != L.lst.golova()) {
+      O << tmp->x << ", ";
+      tmp = tmp->next;
+    }
+    O << tmp->x << '>';
+  }
+  else
+    O << "<none>";
+  return O;
+}
+
+
 template class Slist<int>;
 template class Slist<double>;
 template class Slist<char>;
+template class Slist<Helped>;
