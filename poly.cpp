@@ -1,7 +1,7 @@
 #include "polyg.h"
 
 int main() { 
-    ifstream input("testg.txt");
+    ifstream input("polytest.txt");
     if(!input.is_open()) {
         cout<<"File have not opened!";
         return 1;
