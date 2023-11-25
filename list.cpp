@@ -67,7 +67,6 @@ int findStartingPerson(int N, int M, int L) {
     
 
 int main() {
-    /*
     FILE* m;
     try {
         if((m = fopen("inp.txt","r")) == nullptr) throw Exception{"inp.txt"};
@@ -75,7 +74,7 @@ int main() {
         cout<<"Не существует такого файла, как "<<ex.getMessage()<<endl;
         return -1;
     }
-    int B, N, M, L;
+    int N, M, L;
     double c;
     Slist<int> A;
     Node<int>* temp;
@@ -89,15 +88,13 @@ int main() {
         cout<<"Количество N человек < 1";
         return 0;
     }
-    cout<<"С какого по счёту человека начнём считать? ";
-    cin>>B;
     auto start = high_resolution_clock::now();
     // Создание односвязного списка
     for (int i = 1; i <= N; i++) {
         A.Add(i);
     }
     A.Show();
-    Node<int>* last = A[B-1];
+    Node<int>* last = A[N-1];
     // Цикл по обходу списка
     for (int i = 1; i < N; i++) {
         // Цикл для перехода на M-й элемент вперед
@@ -132,14 +129,38 @@ int main() {
     end = high_resolution_clock::now();
     duration = duration_cast<nanoseconds>(end - start);
     c = duration.count();
-    cout<<"Время выполнения: "<<c<<" наносекунд"<<endl; 
-    */
-    //Тест оператора копирования 
-    Helped G;
-    Slist<Helped> lst; 
-    for (int i = 0; i < 10; ++i) { 
-        cout<<"aboba"; 
-        lst.Add(G);
+    cout<<"Время выполнения: "<<c<<" наносекунд"<<endl;
+    //проверка оператора копирования на списке, элементы которого - целочисленные массивы 
+    int* arr1 = new int[10];
+    int* arr2 = new int[10];
+    int* arr3 = new int[10];
+    for(int i = 0; i < 10; i++) {
+        arr1[i] = i + 1;
+        arr2[i] = 2*(i + 1);
+        arr3[i] = 3*(i + 1);
     }
+    cout<<"list:\n";
+    Slist<int*> list;
+    list.Add(arr1);
+    list.Add(arr2);
+    list.Add(arr3);
+    Slist<int*>::iterator it4 = list.begin();
+
+    do {
+        int* A = *it4;
+        for(int i = 0; i < 10; i++) std::cout << A[i] << " ";
+        std::cout << "\n";
+        it4++;
+    } while (it4 != list.begin());
+    cout<<"copylist:\n";
+    Slist<int*> copylist = list;
+    Slist<int*>::iterator it3 = copylist.begin();
+    
+    do {
+        int* A = *it3;
+        for(int i = 0; i < 10; i++) std::cout << A[i] << " ";
+        std::cout << "\n";
+        it3++;
+    } while (it3 != copylist.begin());
     return 0; 
 }

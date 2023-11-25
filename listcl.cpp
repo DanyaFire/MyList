@@ -5,26 +5,18 @@ struct Node;
 template<typename T>
 class Slist;
 
-template<typename T>
-Node<T>::Node(T value) : x(value), next(nullptr) {};
-
-template<typename T>
-Node<T>::Node(T* value) : x(value), next(nullptr) {};
-
-template<typename T>
-bool Node<T>::comparison(const Node<T>& p1, const Node<T>& p2) {
-  return (p1.x == p2.x) && (p1.next == p2.next);
+template <typename T>
+Slist<T>::Slist() {
+    Head = nullptr;
 }
 
-template<typename T>
-Slist<T>::Slist() : Head(NULL) {};
-
-template<typename T>
+template <typename T>
 Slist<T>::Slist(const Slist& s) {
-  Head = NULL;
-  for (Node<T>* cur = s.Head; cur != NULL; cur = cur->next) {
-    Add(cur->x);
-  }
+    Head = nullptr;
+    Add(s.Head->x);
+    for (Node<T>* cur = s.Head->next; cur != s.Head; cur = cur->next) {
+        Add(cur->x);
+    }
 }
 
 template <typename T>
@@ -67,49 +59,15 @@ bool Slist<T>::operator!=(const Slist<T>& obj) {
 
 template<class T> void Slist<T>::Add(const T& x) {
   Node<T>* temp = new Node<T>(x);
-  if (is_empty()) {
+  if (Head == NULL) {
     temp->next = temp;
     Head = temp;
-  } else if(Head->next == nullptr) {
-    Head->next = temp;
-    temp->next = Head;
   } else {
-    Node<T>* last = Head->next;
-    while (last->next != Head) {
-      last = last->next;
-    }
+    Node<T>* last = Head;
+    while (last->next != Head) last = last->next;
     last->next = temp;
     temp->next = Head;
   }
-}
-
-template<class T> void Slist<T>::Add(const T* x) {
-  Node<T>* temp = new Node<T>(*x);
-  if (is_empty()) {
-    temp->next = temp;
-    Head = temp;
-  } else if(Head->next == nullptr) {
-    Head->next = temp;
-    temp->next = Head;
-  } else {
-    Node<T>* last = Head->next;
-    while (last->next != Head) {
-      last = last->next;
-    }
-    last->next = temp;
-    temp->next = Head;
-  }
-}
-
-template<typename T>
-void Slist<T>::Show() {
-  cout<<Head->x;
-  Node<T>* current = Head->next;
-  while (current != Head) {
-    cout<<" -> "<<current->x;
-    current = current->next;
-  }
-  cout<<endl;
 }
 
 template<typename T>
@@ -168,18 +126,16 @@ void Slist<T>::remlolove(iterator& pos) {
   }
 }
 
-// template<typename T>
-// Node<T>* Slist<T>::find_x(const T& x) {
-//   if(is_empty()) return nullptr;
-//   Node<T>* temp = Head;
-//   while((temp != Head) && (temp->x != x)) {
-//     if((temp != nullptr) && temp->x == x) return temp;
-//     temp = temp->next;
-//   }
-//   cout<<"Такого элемента нет в списке! => ";
-//   return NULL;
-// }
-
+template<typename T>
+void Slist<T>::Show() {
+  cout<<Head->x;
+  Node<T>* current = Head->next;
+  while (current != Head) {
+    cout<<" -> "<<current->x;
+    current = current->next;
+  }
+  cout<<endl;
+}
 
 template<typename T>
 Node<T>* Slist<T>::operator[] (const int i) {
@@ -243,23 +199,33 @@ typename Slist<T>::iterator Slist<T>::end() const {
   return iterator(last);
 }
 
-std::ostream & operator<<( std::ostream &O, Helped &L) {
-  if (L.lst.golova() != nullptr) {
-    Node<int>* tmp = L.lst.golova();
-    O << '<';
-    while (tmp->next != L.lst.golova()) {
-      O << tmp->x << ", ";
-      tmp = tmp->next;
-    }
-    O << tmp->x << '>';
-  }
-  else
-    O << "<none>";
-  return O;
-}
-
 
 template class Slist<int>;
+template class Slist<int*>;
 template class Slist<double>;
 template class Slist<char>;
-template class Slist<Helped>;
+
+// template<typename T>
+// Node<T>* Slist<T>::find_x(const T& x) {
+//   if(is_empty()) return nullptr;
+//   Node<T>* temp = Head;
+//   while((temp != Head) && (temp->x != x)) {
+//     if((temp != nullptr) && temp->x == x) return temp;
+//     temp = temp->next;
+//   }
+//   cout<<"Такого элемента нет в списке! => ";
+//   return NULL;
+// }
+
+// std::ostream & operator<<( std::ostream &O, Slist<int> &L) {
+//   if (L.lst.golova() != nullptr) {
+//     Node<int>* tmp = L.lst.golova();
+//     O << '<';
+//     while (tmp->next != L.lst.golova()) {
+//       O << tmp->x << ", ";
+//       tmp = tmp->next;
+//     }
+//     O << tmp->x << '>';
+//   } else O << "<none>";
+//   return O;
+// }
