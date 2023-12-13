@@ -4,13 +4,15 @@
     int max(int a, int b) {
         return (a > b) ? a : b;
     }
-
-    int AVLTree::depth(Node* node) const {
+    
+    template<class Key, class Value>
+    int AVLTree<Key, Value>::depth(Node* node) const {
         if (node == nullptr) return -1;
         return node->depth;
     }
 
-    int AVLTree::getNodeDepth(Node* node, const int& key) {
+    template<class Key, class Value>
+    int AVLTree<Key, Value>::getNodeDepth(Node* node, const Key& key) {
         if (node == nullptr) return -1; // Узел не найден, возвращаем -1
 
         if (key == node->key) return node->depth; // Найден узел, возвращаем его глубину
@@ -20,8 +22,8 @@
         return getNodeDepth(node->right, key); // Рекурсивно ищем в правом поддереве
     }
 
-
-    AVLTree::Node* AVLTree::newNode(const int& key, const int& value) {
+    template<class Key, class Value>
+    typename AVLTree<Key, Value>::Node* AVLTree<Key, Value>::newNode(const Key& key, const Value& value) {
         Node* node = new Node();
         node->key = key;
         node->value = value;
@@ -31,7 +33,8 @@
         return (node);
     }
 
-    AVLTree::Node* AVLTree::rightRotate(Node* y) {
+    template<class Key, class Value> 
+    typename AVLTree<Key, Value>::Node* AVLTree<Key, Value>::rightRotate(Node* y) {
         Node* x = y->left;
         Node* T2 = x->right;
 
@@ -44,7 +47,8 @@
         return x;
     }
 
-    AVLTree::Node* AVLTree::leftRotate(Node* x) {
+    template<class Key, class Value>
+    typename AVLTree<Key, Value>::Node* AVLTree<Key, Value>::leftRotate(Node* x) {
         Node* y = x->right;
         Node* T2 = y->left;
 
@@ -57,14 +61,16 @@
         return y;
     }
 
-    int AVLTree::getBalance(Node* N) {
+    template<class Key, class Value>
+    int AVLTree<Key, Value>::getBalance(Node* N) {
 
         if (N == nullptr) return -1;
 
         return depth(N->left) - depth(N->right);
     }
-
-    AVLTree::Node* AVLTree::insert(Node* node, const int& key, const int& value) {
+    
+    template<class Key, class Value>
+    typename AVLTree<Key, Value>::Node* AVLTree<Key, Value>::insert(Node* node, const Key& key, const Value& value) {
         // 1. Выполнение обычной вставки узла BST
         if (node == nullptr) return (newNode(key, value));
 
@@ -104,8 +110,9 @@
         // Возвращаем неизмененный указатель на узел
         return node;
     }
-
-    AVLTree::Node* AVLTree::remove(Node* root, const int& key) {
+    
+    template<class Key, class Value>
+    typename AVLTree<Key, Value>::Node* AVLTree<Key, Value>::remove(Node* root, const Key& key) {
     if (root == nullptr) return root;
 
     if (key < root->key) root->left = remove(root->left, key);
@@ -128,6 +135,7 @@
             Node* temp = minValueNode(root->right);
 
             root->key = temp->key;
+            root->value = temp->value;
             root->right = remove(root->right, temp->key);
         }
     }
@@ -154,23 +162,26 @@
     return root;
     }
 
-    AVLTree::Node* AVLTree::minValueNode(Node* node) {
+    template<class Key, class Value>
+    typename AVLTree<Key, Value>::Node* AVLTree<Key, Value>::minValueNode(Node* node) {
         Node* current = node;
 
         while (current->left != nullptr) current = current->left;
         
         return current;
     }
-
-    void AVLTree::inorder(Node* root) {
+    
+    template<class Key, class Value>
+    void AVLTree<Key, Value>::inorder(Node* root) {
         if (root != nullptr) {
             inorder(root->left);
             cout << root->key << " ";
             inorder(root->right);
         }
     }
-
-    bool AVLTree::search(const int& key, int& result) const {
+    
+    template<class Key, class Value>
+    bool AVLTree<Key, Value>::search(const Key& key, Value& result) const {
         Node* current = root;
 
         while (current != nullptr) {
@@ -188,7 +199,8 @@
         return false;  
     }
 
-    void AVLTree::printTree(Node* root, std::string prefix, bool isLeft) {
+    template<class Key, class Value>
+    void AVLTree<Key, Value>::printTree(Node* root, std::string prefix, bool isLeft) {
         if (root != nullptr) {
             cout << prefix;
         cout << (isLeft ? "├──" : "└──");
@@ -199,10 +211,24 @@
         }
     }
 
-    void AVLTree::destroyTree(Node* node) {
+    template<class Key, class Value>
+    void AVLTree<Key, Value>::destroyTree(Node* node) {
         if (node != nullptr) {
             destroyTree(node->left);
             destroyTree(node->right);
             delete node;
         }
     }
+
+    template class AVLTree<int,int>;
+    template class AVLTree<double,double>;
+    template class AVLTree<char,char>;
+    
+    template class AVLTree<int,double>;
+    template class AVLTree<double,int>;
+    template class AVLTree<char,double>;
+
+    template class AVLTree<int, string>;
+    template class AVLTree<int,char>;
+    template class AVLTree<double,char>;
+    template class AVLTree<char,int>;
